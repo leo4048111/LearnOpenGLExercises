@@ -10,7 +10,7 @@
 
 #include "Shader.hpp"
 #include "Camera.h"
-#include "Controller.h"
+#include "Menu.hpp"
 
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 
@@ -34,8 +34,8 @@ int main()
 	glfwSwapInterval(1);
 	glfwMakeContextCurrent(window);
 
-	//initialize controller
 	auto controller = std::make_unique<Controller>(window);
+	auto menu = std::make_unique<Menu>(window, controller.get());
 
 	if (glewInit() != GLEW_OK)
 	{
@@ -222,7 +222,6 @@ int main()
 
 		if (GetAsyncKeyState(VK_NUMPAD6) & 0x01) offsetX += 0.1;
 
-		//handle keyboard input
 		controller->keyboardHandler(window);
 
 		glm::mat4 view = controller->getCamera().getViewMatrix();
@@ -245,6 +244,9 @@ int main()
 				glDrawArrays(GL_TRIANGLES, 0, 36);
 			}
 		}
+
+		//render menu at last to make sure it stays on topmost
+		menu->render();
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

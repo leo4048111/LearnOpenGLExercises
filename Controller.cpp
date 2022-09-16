@@ -42,6 +42,14 @@ void Controller::keyboardHandler(GLFWwindow* window)
 		velocity = 2.f;
 	}
 
+	if ((glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS))
+	{
+		if (isCursorHidden)
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL), isCursorHidden = false;
+		else
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN), isCursorHidden = true;
+	}
+
 	_camera->setPosition(cameraPos);
 }
 
@@ -75,6 +83,7 @@ void Controller::mouseHandler(GLFWwindow* window, double xpos, double ypos)
 inline void Controller::registerMouseCallback(GLFWwindow* window)
 {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	this->isCursorHidden = true;
 	glfwSetWindowUserPointer(window, reinterpret_cast<void*>(this));
 	glfwSetCursorPosCallback(window, Controller::mouseCallback);
 }
