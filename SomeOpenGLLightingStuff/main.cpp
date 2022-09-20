@@ -217,7 +217,7 @@ int main()
 		glm::mat4 model(1.0f);
 
 		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
-		//model = glm::rotate(model, glm::radians(-45.f), glm::vec3(-1.0f, 1.0f, 0.25f));
+		//model = glm::rotate(model, glm::radians(-45.f) * (float)glfwGetTime(), glm::vec3(-1.0f, 1.0f, 0.25f));
 		glm::mat4 view = camera.getViewMatrix();
 		glm::mat4 projection(1.0f);
 		projection = glm::perspective(glm::radians(45.f), 920.f / 560.f, 0.1f, 100.f);
@@ -229,6 +229,11 @@ int main()
 		shader.setUniform4f("u_objectColor", 1.0f, 0.5f, 0.31f, 1.0f);
 		shader.setUniform4f("u_lightColor", 1.0f, 1.0f, 1.0f, 1.0f);
 		shader.setUniform3f("u_lightPos", lightPos.x, lightPos.y, lightPos.z);
+		shader.setUniform3f("u_viewPos", camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
+		shader.setUniform3f("u_material.ambient", 1.0f, 0.5f, 0.31f);
+		shader.setUniform3f("u_material.deffuse", 1.0f, 0.5f, 0.31f);
+		shader.setUniform3f("u_material.specular", 0.5f, 0.5f, 0.5f);
+		shader.setUniform1f("u_material.shininess", 32.0f);
 		glBindVertexArray(va);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 
