@@ -11,7 +11,7 @@
 #include "Shader.hpp"
 #include "Camera.h"
 
-glm::vec3 lightPos(1.2f, 1.0f, 2.0f);
+glm::vec3 lightPos(1.2f, 3.0f, 2.0f);
 
 Camera camera(glm::vec3(0.0f, 0.0f, -5.f));
 
@@ -226,14 +226,14 @@ int main()
 		shader.setUniformMatrix4fv("u_model", model);
 		shader.setUniformMatrix4fv("u_view", view);
 		shader.setUniformMatrix4fv("u_projection", projection);
-		shader.setUniform4f("u_objectColor", 1.0f, 0.5f, 0.31f, 1.0f);
+		shader.setUniform4f("u_objectColor", 1.0f, 1.0f, 0.7f, 1.0f);
 		shader.setUniform4f("u_lightColor", 1.0f, 1.0f, 1.0f, 1.0f);
 		shader.setUniform3f("u_lightPos", lightPos.x, lightPos.y, lightPos.z);
 		shader.setUniform3f("u_viewPos", camera.getPosition().x, camera.getPosition().y, camera.getPosition().z);
-		shader.setUniform3f("u_material.ambient", 1.0f, 0.5f, 0.31f);
-		shader.setUniform3f("u_material.deffuse", 1.0f, 0.5f, 0.31f);
-		shader.setUniform3f("u_material.specular", 0.5f, 0.5f, 0.5f);
-		shader.setUniform1f("u_material.shininess", 32.0f);
+		shader.setUniform3f("u_material.ambient", 0.19225, 0.19225, 0.19225);
+		shader.setUniform3f("u_material.diffuse", 0.50754, 0.50754, 0.50754);
+		shader.setUniform3f("u_material.specular", 0.508273, 0.508273, 0.508273);
+		shader.setUniform1f("u_material.shininess", 0.4 * 128);
 		glBindVertexArray(va);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 

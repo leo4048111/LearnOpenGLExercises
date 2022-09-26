@@ -24,7 +24,7 @@ void main()
 struct Material
 {
 	vec3 ambient;
-	vec3 deffuse;
+	vec3 diffuse;
 	vec3 specular;
 	float shininess;
 };
@@ -43,16 +43,14 @@ in vec3 FragPos;
 
 void main()
 {
-	float specularStrength = 0.5;
-	vec3 viewDir = normalize(u_viewPos - FragPos);
-	vec3 norm = normalize(Normal);
-	vec3 lightDir = normalize(u_lightPos - FragPos);
-	vec3 reflectDir = reflect(-lightDir, norm);
-	float spec = pow(max(dot(viewDir, reflectDir), 0.0), u_material.shininess);
-	vec3 specular = u_material.specular * spec * u_lightColor.xyz;
-	float diff = max(dot(norm, lightDir), 0.0);
-	vec3 diffuse = vec3(diff * u_material.deffuse * u_lightColor.xyz);
-	vec3 ambient = u_material.ambient * u_lightColor.xyz;
+	// 环境光
+	vec3 ambient = u_lightColor.xyz * u_material.ambient;
+
+	// 漫反射
+	vec3 diffuse = u_lightColor.xyz * max(dot(normalize(Normal), normalize(u_lightPos - FragPos)), 0.0) * u_material.diffuse;
+
+	// 镜面反射
+	vec3 specular = u_lightColor.xyz * pow(max(dot(normalize(u_viewPos - FragPos), normalize(Normal)), 0.0), u_material.shininess) * u_material.specular;
 	vec3 result = (ambient + diffuse + specular) * u_objectColor.xyz;
 	color = vec4(result, 1.0);
 };
