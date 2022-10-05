@@ -12,7 +12,7 @@ typedef struct
 class BufferLayout
 {
 private:
-	unsigned int _stride;
+	unsigned int _stride{ 0 };
 	std::vector<LayoutElement> _elements;
 
 public:
