@@ -3,6 +3,7 @@
 #include "VertexArray.hpp"
 #include "VertexBuffer.hpp"
 #include "BufferLayout.hpp"
+#include "Shader.hpp"
 
 static bool init(GLFWwindow*& window)
 {
@@ -48,6 +49,8 @@ int main()
 	layout.push(GL_FLOAT, 2, GL_FALSE);
 	VertexArray va(vb, layout);
 	va.bind();
+	Shader shader("src/shaders/shader.vert", "src/shaders/shader.frag");
+	shader.enable();
 
 	while (!glfwWindowShouldClose(window))
 	{

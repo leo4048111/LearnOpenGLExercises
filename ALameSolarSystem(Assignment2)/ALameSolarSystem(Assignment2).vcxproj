@@ -159,8 +159,13 @@
     <ClInclude Include="src\BufferLayout.hpp" />
     <ClInclude Include="src\IndexBuffer.hpp" />
     <ClInclude Include="src\pch.h" />
+    <ClInclude Include="src\Shader.hpp" />
     <ClInclude Include="src\VertexArray.hpp" />
     <ClInclude Include="src\VertexBuffer.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\shader.frag" />
+    <None Include="src\shaders\shader.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

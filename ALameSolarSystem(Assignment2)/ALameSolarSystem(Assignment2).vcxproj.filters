@@ -10,5 +10,10 @@
     <ClInclude Include="src\IndexBuffer.hpp" />
     <ClInclude Include="src\BufferLayout.hpp" />
     <ClInclude Include="src\VertexArray.hpp" />
+    <ClInclude Include="src\Shader.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\shaders\shader.vert" />
+    <None Include="src\shaders\shader.frag" />
   </ItemGroup>
 </Project>

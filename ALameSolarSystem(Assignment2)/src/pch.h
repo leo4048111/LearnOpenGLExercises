@@ -5,6 +5,9 @@
 
 #include <iostream>
 #include <vector>
+#include <string>
+#include <fstream>
+#include <sstream>
 
 inline bool glLogCall(const char* function, const char* file, int line)
 {
