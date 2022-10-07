@@ -1,11 +1,12 @@
 #pragma once
 
-#include "pch.h"
+#include "def.hpp"
 
 class Shader
 {
 private:
 	GLuint _id;
+	std::unordered_map<std::string, int> _umap;
 
 public:
 	Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
@@ -14,8 +15,10 @@ public:
 public:
 	void enable() const;
 	void disable() const;
+	void uniformMatrix4fv(const std::string& name, glm::mat4 mat);
 
 private:
+	int getUniformLocation(const std::string& name);
 	std::string getShaderSource(std::string path) const;
 	GLuint compileShader(GLenum type, const std::string& source) const;
 };
@@ -81,4 +84,22 @@ void Shader::enable() const
 void Shader::disable() const
 {
 	GLCall(glUseProgram(0));
+}
+
+int Shader::getUniformLocation(const std::string& name)
+{
+	if (_umap.find(name) != _umap.end())
+	{
+		return _umap[name];
+	}
+
+	int pos = glGetUniformLocation(_id, name.c_str());
+	if (pos == -1) printf("Uniform %s doesn't exist!\n", name.c_str());
+	_umap.insert(make_pair(name, pos));
+	return pos;
+}
+
+void Shader::uniformMatrix4fv(const std::string& name, glm::mat4 mat)
+{
+	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &mat[0][0]);
 }

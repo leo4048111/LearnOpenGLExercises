@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pch.h"
+#include "def.hpp"
 #include "VertexBuffer.hpp"
 #include "BufferLayout.hpp"
 
@@ -11,7 +11,7 @@ private:
 
 public:
 	VertexArray(const VertexBuffer& vbo, const BufferLayout& layout);
-	~VertexArray() = default;
+	~VertexArray();
 
 public:
 	void bind() const;
@@ -33,6 +33,11 @@ VertexArray::VertexArray(const VertexBuffer& vbo, const BufferLayout& layout)
 		offset += element.count * BufferLayout::getTypeSize(element.type);
 	}
 	this->unbind();
+}
+
+VertexArray::~VertexArray()
+{
+	GLCall(glDeleteVertexArrays(1, &_id));
 }
 
 void VertexArray::bind() const

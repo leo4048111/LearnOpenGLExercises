@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pch.h"
+#include "def.hpp"
 
 class VertexBuffer
 {
@@ -9,7 +9,7 @@ private:
 
 public:
 	VertexBuffer(const void* data, const size_t size);
-	~VertexBuffer() = default;
+	~VertexBuffer();
 
 public:
 	void bind() const;
@@ -22,6 +22,11 @@ VertexBuffer::VertexBuffer(const void* data, const size_t size)
 	this->bind();
 	glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
 	this->unbind();
+}
+
+VertexBuffer::~VertexBuffer()
+{
+	GLCall(glDeleteBuffers(1, &_id))
 }
 
 void VertexBuffer::bind() const

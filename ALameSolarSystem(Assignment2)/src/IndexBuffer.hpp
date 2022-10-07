@@ -9,7 +9,7 @@ private:
 	const unsigned int _count;
 public:
 	IndexBuffer(const void* data, const unsigned int count);
-	~IndexBuffer() = default;
+	~IndexBuffer();
 
 public:
 	void bind() const;
@@ -23,6 +23,11 @@ IndexBuffer::IndexBuffer(const void* data, const unsigned int count) :
 	this->bind();
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(unsigned int), data, GL_STATIC_DRAW);
 	this->unbind();
+}
+
+IndexBuffer::~IndexBuffer()
+{
+	GLCall(glDeleteBuffers(1, &_id))
 }
 
 void IndexBuffer::bind() const
