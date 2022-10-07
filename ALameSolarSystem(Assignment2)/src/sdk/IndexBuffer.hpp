@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pch.h"
+#include "def.hpp"
 
 class IndexBuffer
 {
@@ -14,6 +14,7 @@ public:
 public:
 	void bind() const;
 	void unbind() const;
+	const unsigned int count() const { return _count; };
 };
 
 IndexBuffer::IndexBuffer(const void* data, const unsigned int count) :
