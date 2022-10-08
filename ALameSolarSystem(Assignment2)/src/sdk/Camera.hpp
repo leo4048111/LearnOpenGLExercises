@@ -29,7 +29,7 @@ private:
 	glm::vec3 _position;
 
 	GLfloat _pitch{ 0.0f };
-	GLfloat _yaw{ 90.f };
+	GLfloat _yaw{ -90.f };
 
 public:
 	Camera(glm::vec3 position);

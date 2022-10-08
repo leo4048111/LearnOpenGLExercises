@@ -44,8 +44,8 @@ int main()
 
 	std::vector<float> vertexes;
 	std::vector<unsigned int> indexes;
-	int H = 100, V = 100;
-	float R = 100.f;
+	int H = 40, V = 40;
+	float R = 50.f;
 	float pitchMod = 180.f / H;
 	float yawMod = 360.f / V;
 
@@ -111,7 +111,7 @@ int main()
 	Shader shader("src/shaders/shader.vert", "src/shaders/shader.frag");
 	shader.enable();
 
-	Camera camera({ 0.0f, 0.0f, 50.0f });
+	Camera camera({ 0.0f, 0.0f, 100.0f });
 
 	glm::mat4 model(1.0f);
 	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
