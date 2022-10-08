@@ -34,6 +34,5 @@ private:
 	glm::vec3 _cameraOrigin;
 
 	bool isCursorHidden{ true };
-	
 };
 

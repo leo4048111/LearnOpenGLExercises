@@ -1,13 +1,12 @@
-#include "def.hpp"
-
+#include "sdk/def.hpp"
 #include "sdk/VertexArray.hpp"
 #include "sdk/VertexBuffer.hpp"
 #include "sdk/BufferLayout.hpp"
 #include "sdk/IndexBuffer.hpp"
 #include "sdk/Shader.hpp"
 #include "sdk/Camera.hpp"
+#include "sdk/Controller.hpp"
 
-#include <Windows.h>
 
 static bool init(GLFWwindow*& window)
 {
@@ -23,13 +22,11 @@ static bool init(GLFWwindow*& window)
 		glfwTerminate();
 		return false;
 	}
+
 	glfwMakeContextCurrent(window);
 
 	if (glewInit() != GLEW_OK)
-	{
-		glfwTerminate();
 		return false;
-	}
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -99,15 +96,10 @@ int main()
 	vertexes.push_back(0.0f);
 
 	VertexBuffer vb(&vertexes[0], vertexes.size() * sizeof(float));
-	vb.bind();
+	IndexBuffer ib(&indexes[0], indexes.size());
 	BufferLayout layout;
 	layout.push(GL_FLOAT, 3, GL_FALSE);
-	VertexArray va(vb, layout);
-	va.bind();
-	IndexBuffer ib(&indexes[0], indexes.size());
-	ib.bind();
-	va.unbind();
-	ib.unbind();
+	VertexArray va(vb, ib, layout);
 	Shader shader("src/shaders/shader.vert", "src/shaders/shader.frag");
 	shader.enable();
 
@@ -117,10 +109,11 @@ int main()
 	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 	glm::mat4 projection(1.0f);
 	projection = glm::perspective(glm::radians(45.f), 640.f / 640.f, 0.1f, 1000.f);
-	//projection = glm::ortho(-1.f, 1.f, -1.f, 1.f, -1000.f, 1000.f);
 
 	shader.uniformMatrix4fv("u_model", model);
 	shader.uniformMatrix4fv("u_projection", projection);
+
+	Controller::getInstance()->install(window, &camera);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -130,15 +123,13 @@ int main()
 		va.bind();
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		GLCall(glDrawElements(GL_TRIANGLES, ib.count(), GL_UNSIGNED_INT, nullptr));
-		//glDrawArrays(GL_TRIANGLES, 0, 6);
-
-		if (GetAsyncKeyState(VK_UP) & 0x01) camera.move(Camera::Direction::FORWARD, 10.f);
-		if (GetAsyncKeyState(VK_DOWN) & 0x01) camera.move(Camera::Direction::BACKWARD, 10.f);
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 
-	glfwTerminate();
+	Controller::getInstance()->uninstall();
+
+	//glfwTerminate();
 	return 0;
 }

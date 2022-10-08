@@ -2,6 +2,8 @@
 
 #include "def.hpp"
 
+#define CLAMP(x, min, max) if(x < min) x = min; else if(x > max) x = max
+
 class Camera
 {
 public:
@@ -69,7 +71,8 @@ void Camera::rotate(Rotation rotation, float angle)
 	default:
 		break;
 	}
-
+	
+	CLAMP(_pitch, -89, 89);
 	update();
 }
 

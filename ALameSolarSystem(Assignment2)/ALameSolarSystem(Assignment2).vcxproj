@@ -169,8 +169,9 @@
   <ItemGroup>
     <ClInclude Include="src\sdk\BufferLayout.hpp" />
     <ClInclude Include="src\sdk\Camera.hpp" />
+    <ClInclude Include="src\sdk\Controller.hpp" />
     <ClInclude Include="src\sdk\IndexBuffer.hpp" />
-    <ClInclude Include="src\def.hpp" />
+    <ClInclude Include="src\sdk\def.hpp" />
     <ClInclude Include="src\sdk\Shader.hpp" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />

@@ -3,6 +3,7 @@
 #include "def.hpp"
 #include "VertexBuffer.hpp"
 #include "BufferLayout.hpp"
+#include "IndexBuffer.hpp"
 
 class VertexArray
 {
@@ -10,7 +11,7 @@ private:
 	GLuint _id;
 
 public:
-	VertexArray(const VertexBuffer& vbo, const BufferLayout& layout);
+	VertexArray(const VertexBuffer& vbo, const IndexBuffer& ibo, const BufferLayout& layout);
 	~VertexArray();
 
 public:
@@ -18,11 +19,12 @@ public:
 	void unbind() const;
 };
 
-VertexArray::VertexArray(const VertexBuffer& vbo, const BufferLayout& layout)
+VertexArray::VertexArray(const VertexBuffer& vbo, const IndexBuffer& ibo, const BufferLayout& layout)
 {
 	GLCall(glGenVertexArrays(1, &_id));
 	this->bind();
 	vbo.bind();
+	ibo.bind();
 	auto& elements = layout.elements();
 	unsigned int offset = 0;
 	for (int i = 0; i < elements.size(); i++)
