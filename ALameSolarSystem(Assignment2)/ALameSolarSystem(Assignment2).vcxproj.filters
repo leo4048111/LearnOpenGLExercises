@@ -314,6 +314,8 @@
     <ClInclude Include="src\sdk\Camera.hpp" />
     <ClInclude Include="src\sdk\Controller.hpp" />
     <ClInclude Include="src\sdk\Renderer.hpp" />
+    <ClInclude Include="src\Planet.hpp" />
+    <ClInclude Include="src\Helper.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\shader.vert" />

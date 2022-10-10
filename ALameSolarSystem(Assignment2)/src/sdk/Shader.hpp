@@ -4,6 +4,8 @@
 
 class Shader
 {
+	NONCOPYABLE(Shader)
+
 private:
 	GLuint _id;
 	std::unordered_map<std::string, int> _umap;
@@ -11,6 +13,10 @@ private:
 public:
 	Shader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
 	~Shader();
+	Shader(Shader&& shader) noexcept:
+		_id(shader._id), _umap(shader._umap) {
+		shader._id = 0;
+	}
 
 public:
 	void enable() const;

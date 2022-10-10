@@ -79,13 +79,14 @@ void Camera::rotate(Rotation rotation, float angle)
 void Camera::move(Direction direction, float offset)
 {
 	glm::vec3 right = glm::normalize(glm::cross(_up, _forward));
+	glm::vec3 forward = -glm::normalize(glm::cross(_up, right));
 	switch (direction)
 	{
 	case Camera::Direction::FORWARD:
-		_position += _forward * offset;
+		_position += forward * offset;
 		break;
 	case Camera::Direction::BACKWARD:
-		_position -= _forward * offset;
+		_position -= forward * offset;
 		break;
 	case Camera::Direction::LEFT:
 		_position -= right * offset;

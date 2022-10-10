@@ -4,14 +4,18 @@
 
 class VertexBuffer
 {
+	NONCOPYABLE(VertexBuffer)
+
 private:
 	GLuint _id;
 
 public:
 	VertexBuffer(const void* data, const size_t size);
 	~VertexBuffer();
-	VertexBuffer(const VertexBuffer&) = delete;
-	VertexBuffer& operator=(const VertexBuffer&) = delete;
+	VertexBuffer(VertexBuffer&& vb) noexcept:
+		_id(vb._id) {
+		vb._id = 0;
+	};
 
 public:
 	void bind() const;

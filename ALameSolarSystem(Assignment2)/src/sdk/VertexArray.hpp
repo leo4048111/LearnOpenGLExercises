@@ -7,17 +7,20 @@
 
 class VertexArray
 {
+	NONCOPYABLE(VertexArray)
+
 private:
 	GLuint _id;
-	const VertexBuffer& _vbo;
-	const IndexBuffer& _ibo;
-	const BufferLayout& _layout;
+	VertexBuffer _vbo;
+	IndexBuffer _ibo;
 
 public:
-	VertexArray(const VertexBuffer& vbo, const IndexBuffer& ibo, const BufferLayout& layout);
+	VertexArray(VertexBuffer& vbo, IndexBuffer& ibo, const BufferLayout& layout);
 	~VertexArray();
-	VertexArray(const VertexArray&) = delete;
-	VertexArray& operator=(const VertexArray&) = delete;
+	VertexArray(VertexArray&& va) noexcept :
+		_id(va._id), _vbo(std::move(va._vbo)), _ibo(std::move(va._ibo)) {
+		va._id = 0;
+	}
 
 public:
 	void bind() const;
@@ -25,13 +28,13 @@ public:
 	const unsigned int count() const { return _ibo.count(); };
 };
 
-VertexArray::VertexArray(const VertexBuffer& vbo, const IndexBuffer& ibo, const BufferLayout& layout) :
-	_vbo(vbo), _ibo(ibo), _layout(layout)
+VertexArray::VertexArray(VertexBuffer& vbo, IndexBuffer& ibo, const BufferLayout& layout) :
+	_vbo(std::move(vbo)), _ibo(std::move(ibo))
 {
 	GLCall(glGenVertexArrays(1, &_id));
 	this->bind();
-	vbo.bind();
-	ibo.bind();
+	_vbo.bind();
+	_ibo.bind();
 	auto& elements = layout.elements();
 	unsigned int offset = 0;
 	for (int i = 0; i < elements.size(); i++)

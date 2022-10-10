@@ -6,10 +6,10 @@
 
 class Renderer
 {
+	NONCOPYABLE(Renderer)
+
 public:
 	~Renderer() = default;
-	Renderer(const Renderer&) = delete;
-	Renderer& operator=(const Renderer&) = delete;
 
 private:
 	Renderer() = default;

@@ -4,14 +4,19 @@
 
 class IndexBuffer
 {
+	NONCOPYABLE(IndexBuffer)
+
 private:
 	GLuint _id;
 	const unsigned int _count;
+
 public:
 	IndexBuffer(const void* data, const unsigned int count);
 	~IndexBuffer();
-	IndexBuffer(const IndexBuffer&) = delete;
-	IndexBuffer& operator=(const IndexBuffer&) = delete;
+	IndexBuffer(IndexBuffer&& ib) noexcept :
+		_id(ib._id), _count(ib.count()) {
+		ib._id = 0;
+	};
 
 public:
 	void bind() const;

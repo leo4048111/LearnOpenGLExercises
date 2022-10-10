@@ -35,3 +35,13 @@ inline void glClearError()
 glClearError(); \
 x; \
 ASSERT(glLogCall(#x, __FILE__, __LINE__));
+
+#define NONCOPYABLE(classname) \
+public: \
+classname(const classname&) = delete; \
+classname& operator=(const classname&) = delete;
+
+#define INCONSTRUCTIBLE(classname) \
+NONCOPYABLE(classname) \
+classname() = delete; \
+~classname() = delete;

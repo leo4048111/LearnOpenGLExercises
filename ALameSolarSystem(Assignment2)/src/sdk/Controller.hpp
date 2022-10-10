@@ -7,10 +7,10 @@
 
 class Controller
 {
+	NONCOPYABLE(Controller)
+
 public:
 	~Controller() = default;
-	Controller(const Controller&) = delete;
-	Controller& operator= (const Controller&) = delete;
 
 private:
 	Controller() = default;
@@ -86,7 +86,7 @@ void Controller::keyboardHandler()
 	{
 		static float deltaTime = 0.0f;
 		static float lastFrame = 0.0f;
-		float currentFrame = glfwGetTime();
+		float currentFrame = (float)glfwGetTime();
 		if (!lastFrame) lastFrame = currentFrame;
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -133,6 +133,6 @@ void Controller::mouseHandler(double xpos, double ypos)
 	lastPosX = xpos;
 	lastPosY = ypos;
 
-	_camera->rotate(Camera::Rotation::UP, -deltaY * _mouseSensitivity);
-	_camera->rotate(Camera::Rotation::CW, deltaX * _mouseSensitivity);
+	_camera->rotate(Camera::Rotation::UP, -(float)deltaY * _mouseSensitivity);
+	_camera->rotate(Camera::Rotation::CW, (float)deltaX * _mouseSensitivity);
 }
