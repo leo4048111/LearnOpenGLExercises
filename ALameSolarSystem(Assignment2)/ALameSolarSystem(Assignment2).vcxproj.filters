@@ -14,7 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\sdk\VertexBuffer.hpp" />
-    <ClInclude Include="src\sdk\def.hpp" />
+    <ClInclude Include="src\sdk\Headers.hpp" />
     <ClInclude Include="src\sdk\IndexBuffer.hpp" />
     <ClInclude Include="src\sdk\BufferLayout.hpp" />
     <ClInclude Include="src\sdk\VertexArray.hpp" />
@@ -313,6 +313,7 @@
     <ClInclude Include="src\vendor\stb_image\stb_image.h" />
     <ClInclude Include="src\sdk\Camera.hpp" />
     <ClInclude Include="src\sdk\Controller.hpp" />
+    <ClInclude Include="src\sdk\Renderer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\shader.vert" />

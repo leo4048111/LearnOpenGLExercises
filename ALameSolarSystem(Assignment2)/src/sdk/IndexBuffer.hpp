@@ -1,6 +1,6 @@
 #pragma once
 
-#include "def.hpp"
+#include "Headers.hpp"
 
 class IndexBuffer
 {
@@ -10,6 +10,8 @@ private:
 public:
 	IndexBuffer(const void* data, const unsigned int count);
 	~IndexBuffer();
+	IndexBuffer(const IndexBuffer&) = delete;
+	IndexBuffer& operator=(const IndexBuffer&) = delete;
 
 public:
 	void bind() const;

@@ -1,4 +1,4 @@
-#include "sdk/def.hpp"
+#include "sdk/Headers.hpp"
 #include "sdk/VertexArray.hpp"
 #include "sdk/VertexBuffer.hpp"
 #include "sdk/BufferLayout.hpp"
@@ -6,6 +6,7 @@
 #include "sdk/Shader.hpp"
 #include "sdk/Camera.hpp"
 #include "sdk/Controller.hpp"
+#include "sdk/Renderer.hpp"
 
 
 static bool init(GLFWwindow*& window)
@@ -101,8 +102,6 @@ int main()
 	layout.push(GL_FLOAT, 3, GL_FALSE);
 	VertexArray va(vb, ib, layout);
 	Shader shader("src/shaders/shader.vert", "src/shaders/shader.frag");
-	shader.enable();
-
 	Camera camera({ 0.0f, 0.0f, 100.0f });
 
 	glm::mat4 model(1.0f);
@@ -120,10 +119,7 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		shader.uniformMatrix4fv("u_view", camera.viewMatrix());
-		va.bind();
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		GLCall(glDrawElements(GL_TRIANGLES, ib.count(), GL_UNSIGNED_INT, nullptr));
-
+		Renderer::getInstance()->draw(va, shader, GL_POINT);
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "def.hpp"
+#include "Headers.hpp"
 
 class Shader
 {
@@ -101,5 +101,7 @@ int Shader::getUniformLocation(const std::string& name)
 
 void Shader::uniformMatrix4fv(const std::string& name, glm::mat4 mat)
 {
+	this->enable();
 	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &mat[0][0]);
+	this->disable();
 }

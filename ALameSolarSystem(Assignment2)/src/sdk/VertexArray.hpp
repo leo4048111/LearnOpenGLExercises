@@ -1,6 +1,6 @@
 #pragma once
 
-#include "def.hpp"
+#include "Headers.hpp"
 #include "VertexBuffer.hpp"
 #include "BufferLayout.hpp"
 #include "IndexBuffer.hpp"
@@ -9,17 +9,24 @@ class VertexArray
 {
 private:
 	GLuint _id;
+	const VertexBuffer& _vbo;
+	const IndexBuffer& _ibo;
+	const BufferLayout& _layout;
 
 public:
 	VertexArray(const VertexBuffer& vbo, const IndexBuffer& ibo, const BufferLayout& layout);
 	~VertexArray();
+	VertexArray(const VertexArray&) = delete;
+	VertexArray& operator=(const VertexArray&) = delete;
 
 public:
 	void bind() const;
 	void unbind() const;
+	const unsigned int count() const { return _ibo.count(); };
 };
 
-VertexArray::VertexArray(const VertexBuffer& vbo, const IndexBuffer& ibo, const BufferLayout& layout)
+VertexArray::VertexArray(const VertexBuffer& vbo, const IndexBuffer& ibo, const BufferLayout& layout) :
+	_vbo(vbo), _ibo(ibo), _layout(layout)
 {
 	GLCall(glGenVertexArrays(1, &_id));
 	this->bind();

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "def.hpp"
+#include "Headers.hpp"
 
 class VertexBuffer
 {
@@ -10,6 +10,8 @@ private:
 public:
 	VertexBuffer(const void* data, const size_t size);
 	~VertexBuffer();
+	VertexBuffer(const VertexBuffer&) = delete;
+	VertexBuffer& operator=(const VertexBuffer&) = delete;
 
 public:
 	void bind() const;
