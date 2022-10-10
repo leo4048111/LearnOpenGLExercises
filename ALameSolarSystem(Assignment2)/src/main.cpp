@@ -9,6 +9,7 @@
 #include "sdk/Renderer.hpp"
 
 #include "Helper.hpp"
+#include "Planet.hpp"
 
 
 static bool init(GLFWwindow*& window)
@@ -42,27 +43,31 @@ int main()
 	GLFWwindow* window = nullptr;
 	if (!init(window)) return 0;
 
-	auto va = Helper::makeSphereVertexArray(20, 20, 50.f);
+	auto va = Helper::makeSphereVertexArray(10, 10, 50.f);
 
-	Shader shader("src/shaders/shader.vert", "src/shaders/shader.frag");
+	auto shader = std::make_shared<Shader>("src/shaders/shader.vert", "src/shaders/shader.frag");
+
+	Planet planet(va, shader);
+	Planet planet2(va, shader);
+	planet2.moveTo({ 0.0f, 0.0f, 0.0f });
+
 	Camera camera({ 0.0f, 0.0f, 100.0f });
 
-	glm::mat4 model(1.0f);
-	model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
 	glm::mat4 projection(1.0f);
 	projection = glm::perspective(glm::radians(45.f), 640.f / 640.f, 0.1f, 1000.f);
 
-	shader.uniformMatrix4fv("u_model", model);
-	shader.uniformMatrix4fv("u_projection", projection);
+	shader->uniformMatrix4fv("u_projection", projection);
 
 	Controller::getInstance()->install(window, &camera);
 
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-		shader.uniformMatrix4fv("u_view", camera.viewMatrix());
-		Renderer::getInstance()->draw(*va, shader, GL_POINT);
+		shader->uniformMatrix4fv("u_view", camera.viewMatrix());
+		planet2.draw(GL_LINE);
+		auto degree = glfwGetTime();
+		planet.moveTo({ 100.f * cosf(glm::radians(degree)), 0.0f, 100.f * sinf(glm::radians(degree)) });
+		//planet.draw(GL_LINE);
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}

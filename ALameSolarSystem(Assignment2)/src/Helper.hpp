@@ -38,31 +38,31 @@ std::shared_ptr<VertexArray> Helper::makeSphereVertexArray(int horizontalLevel, 
 
 			if (i == 1)
 			{
-				indices.push_back(j % horizontalLevel);
-				indices.push_back((j + 1) % horizontalLevel);
+				indices.push_back(j % horizontalLevel + 1);
+				indices.push_back((j + 1) % horizontalLevel + 1);
 				indices.push_back(0);
 			}
 
 			if (i != verticalLevel - 1)
 			{
-				indices.push_back((i - 1) * horizontalLevel + j % horizontalLevel);
-				indices.push_back((i - 1) * horizontalLevel + (j + 1) % horizontalLevel);
-				indices.push_back(i * horizontalLevel + j % horizontalLevel);
+				indices.push_back((i - 1) * horizontalLevel + j % horizontalLevel + 1);
+				indices.push_back((i - 1) * horizontalLevel + (j + 1) % horizontalLevel + 1);
+				indices.push_back(i * horizontalLevel + j % horizontalLevel + 1);
 
-				indices.push_back(i * horizontalLevel + j % horizontalLevel);
-				indices.push_back(i * horizontalLevel + (j + 1) % horizontalLevel);
-				indices.push_back((i - 1) * horizontalLevel + (j + 1) % horizontalLevel);
+				indices.push_back(i * horizontalLevel + j % horizontalLevel + 1);
+				indices.push_back(i * horizontalLevel + (j + 1) % horizontalLevel + 1);
+				indices.push_back((i - 1) * horizontalLevel + (j + 1) % horizontalLevel + 1);
 			}
 			else
 			{
-				indices.push_back((i - 1) * horizontalLevel + j % horizontalLevel);
-				indices.push_back((i - 1) * horizontalLevel + (j + 1) % horizontalLevel);
+				indices.push_back((i - 1) * horizontalLevel + j % horizontalLevel + 1);
+				indices.push_back((i - 1) * horizontalLevel + (j + 1) % horizontalLevel + 1);
 				indices.push_back(1 + (verticalLevel - 1) * horizontalLevel);
 			}
 		}
 	}
 
-	//bottom most point
+	// bottom most point
 	coords.push_back(0.0f);
 	coords.push_back(-radius);
 	coords.push_back(0.0f);
