@@ -31,6 +31,6 @@ void Planet::draw(GLenum mode)
 
 void Planet::moveTo(glm::vec3 pos)
 {
-	_model = glm::translate(_model, pos);
+	_model = glm::translate(glm::mat4(1.0f), pos);
 }
 

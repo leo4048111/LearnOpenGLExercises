@@ -11,6 +11,8 @@
 #include "Helper.hpp"
 #include "Planet.hpp"
 
+const int windowWidth = 1280, windowHeight = 720;
+
 
 static bool init(GLFWwindow*& window)
 {
@@ -19,7 +21,7 @@ static bool init(GLFWwindow*& window)
 		return false;
 	}
 
-	window = glfwCreateWindow(640, 640, "Solar System", nullptr, nullptr);
+	window = glfwCreateWindow(windowWidth, windowHeight, "Solar System", nullptr, nullptr);
 
 	if (window == nullptr)
 	{
@@ -37,7 +39,6 @@ static bool init(GLFWwindow*& window)
 	return true;
 }
 
-
 int main()
 {
 	GLFWwindow* window = nullptr;
@@ -54,7 +55,7 @@ int main()
 	Camera camera({ 0.0f, 0.0f, 100.0f });
 
 	glm::mat4 projection(1.0f);
-	projection = glm::perspective(glm::radians(45.f), 640.f / 640.f, 0.1f, 1000.f);
+	projection = glm::perspective(glm::radians(45.f), (float)windowWidth / windowHeight, 0.1f, 1000.f);
 
 	shader->uniformMatrix4fv("u_projection", projection);
 
@@ -65,9 +66,9 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shader->uniformMatrix4fv("u_view", camera.viewMatrix());
 		planet2.draw(GL_LINE);
-		auto degree = glfwGetTime();
-		planet.moveTo({ 100.f * cosf(glm::radians(degree)), 0.0f, 100.f * sinf(glm::radians(degree)) });
-		//planet.draw(GL_LINE);
+		auto degree = 100* glfwGetTime();
+		planet.moveTo({ 150.f * cosf(glm::radians(degree)), 0.0f, 150.f * sinf(glm::radians(degree)) });
+		planet.draw(GL_LINE);
 		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
