@@ -316,6 +316,7 @@
     <ClInclude Include="src\sdk\Renderer.hpp" />
     <ClInclude Include="src\Planet.hpp" />
     <ClInclude Include="src\Helper.hpp" />
+    <ClInclude Include="src\World.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="src\shaders\shader.vert" />

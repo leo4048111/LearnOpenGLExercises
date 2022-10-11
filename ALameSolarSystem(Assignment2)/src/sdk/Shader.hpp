@@ -22,6 +22,7 @@ public:
 	void enable() const;
 	void disable() const;
 	void uniformMatrix4fv(const std::string& name, glm::mat4 mat);
+	void uniform4fv(const std::string& name, glm::vec4 vec);
 
 private:
 	int getUniformLocation(const std::string& name);
@@ -108,6 +109,13 @@ int Shader::getUniformLocation(const std::string& name)
 void Shader::uniformMatrix4fv(const std::string& name, glm::mat4 mat)
 {
 	this->enable();
-	glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &mat[0][0]);
+	GLCall(glUniformMatrix4fv(getUniformLocation(name), 1, GL_FALSE, &mat[0][0]));
+	this->disable();
+}
+
+void Shader::uniform4fv(const std::string& name, glm::vec4 vec)
+{
+	this->enable();
+	GLCall(glUniform4fv(getUniformLocation(name), 1, &vec.x));
 	this->disable();
 }

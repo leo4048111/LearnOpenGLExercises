@@ -30,15 +30,18 @@ private:
 	glm::vec3 _forward;
 	glm::vec3 _position;
 
+	glm::mat4 _projection;
+
 	GLfloat _pitch{ 0.0f };
-	GLfloat _yaw{ -90.f };
+	GLfloat _yaw{ 0.0f };
 
 public:
-	Camera(glm::vec3 position);
+	Camera(glm::vec3 position, glm::mat4 projection);
 	~Camera() = default;
 
 public:
 	const glm::mat4 viewMatrix() const { return glm::lookAt(_position, _forward + _position, _up); };
+	const glm::mat4 projectionMatrix() const { return _projection; };
 	void rotate(Rotation rotation, float angle);
 	void move(Direction direction, float offset);
 
@@ -46,8 +49,8 @@ private:
 	void update();
 };
 
-Camera::Camera(glm::vec3 position) :
-	_position(position), _up(glm::vec3(0.0f, 1.0f, 0.0f)), _forward(glm::vec3(0.0f, 0.0f, -1.0f))
+Camera::Camera(glm::vec3 position, glm::mat4 projection) :
+	_position(position), _up(glm::vec3(0.0f, 1.0f, 0.0f)), _forward(glm::vec3(0.0f, 0.0f, -1.0f)), _projection(projection)
 {
 	update();
 }
