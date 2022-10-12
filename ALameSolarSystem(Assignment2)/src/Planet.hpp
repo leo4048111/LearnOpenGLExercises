@@ -29,6 +29,12 @@ public:
 	{
 	}
 
+	Planet(const Planet& planet) :
+		_va(planet._va), _shader(planet._shader), _pos(planet._pos), _scale(planet._scale), _color(planet._color), _mass(planet._mass)
+	{
+
+	}
+
 	void draw(GLenum mode = GL_FILL);
 
 	void update(const glm::vec3 center, const float centerMass, const float eccentricity, const float focalDistance);
@@ -37,9 +43,13 @@ public:
 
 	void moveTo(const glm::vec3 pos);
 
-	const glm::vec3 position() { return _pos; };
+	void setColor(const glm::vec4 color) { _color = color; };
 
-	const float mass() { return _mass; };
+	const glm::vec4 color() const { return _color; };
+
+	const glm::vec3 position() const { return _pos; };
+
+	const float mass() const { return _mass; };
 };
 
 void Planet::update(const glm::vec3 center, const float centerMass, const float eccentricity, const float focalDistance)

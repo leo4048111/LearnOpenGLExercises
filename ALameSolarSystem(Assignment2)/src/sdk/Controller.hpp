@@ -24,6 +24,7 @@ private:
 
 	std::unique_ptr<std::thread> _tController;
 	bool isInstalled{ false };
+	bool isPaused{ false };
 
 public:
 	static std::unique_ptr<Controller>& getInstance() {
@@ -33,6 +34,8 @@ public:
 
 	void install(GLFWwindow* window, Camera* camera);
 	void uninstall();
+	void pause();
+	void resume();
 
 	const float getMouseSensitivity() const { return _mouseSensitivity; };
 	const float getCameraSpeed() const { return _cameraSpeed; };
@@ -74,7 +77,7 @@ void Controller::uninstall()
 
 inline void Controller::registerCallbacks()
 {
-	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(_window, Controller::mouseCallback);
 	_tController = std::make_unique<std::thread>(&Controller::keyboardHandler, Controller::getInstance().get());
 	_tController->detach();
@@ -84,6 +87,7 @@ void Controller::keyboardHandler()
 {
 	while (isInstalled)
 	{
+		if (isPaused) continue;
 		static float deltaTime = 0.0f;
 		static float lastFrame = 0.0f;
 		float currentFrame = (float)glfwGetTime();
@@ -116,6 +120,7 @@ void Controller::mouseCallback(GLFWwindow* window, double xpos, double ypos)
 
 void Controller::mouseHandler(double xpos, double ypos)
 {
+	if (isPaused) return;
 	static double lastPosX = 0.0f;
 	static double lastPosY = 0.0f;
 	static bool isFirstEntry = true;
@@ -135,4 +140,14 @@ void Controller::mouseHandler(double xpos, double ypos)
 
 	_camera->rotate(Camera::Rotation::UP, -(float)deltaY * _mouseSensitivity);
 	_camera->rotate(Camera::Rotation::CW, (float)deltaX * _mouseSensitivity);
+}
+
+void Controller::pause()
+{
+	isPaused = true;
+}
+
+void Controller::resume()
+{
+	isPaused = false;
 }

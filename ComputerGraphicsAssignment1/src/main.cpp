@@ -13,7 +13,7 @@
 
 int main()
 {
-	const unsigned int wWidth = 980, wHeight = 560;
+	const unsigned int wWidth = 1280, wHeight = 720;
 	//initialization
 	if (!glfwInit())
 	{
