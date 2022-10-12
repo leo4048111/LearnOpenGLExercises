@@ -120,10 +120,14 @@ void Controller::mouseCallback(GLFWwindow* window, double xpos, double ypos)
 
 void Controller::mouseHandler(double xpos, double ypos)
 {
-	if (isPaused) return;
 	static double lastPosX = 0.0f;
 	static double lastPosY = 0.0f;
 	static bool isFirstEntry = true;
+	if (isPaused)
+	{
+		isFirstEntry = true;
+		return;
+	}
 
 	if (isFirstEntry)
 	{
