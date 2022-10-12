@@ -17,6 +17,11 @@ private:
 	glm::vec4 _color;
 	float _mass;
 
+	// update values
+	float _degreeDelta{ 0.0f };
+	float _lastFrame{ 0.0f };
+	bool _isFirstEntry{ true };
+
 public:
 	Planet(std::shared_ptr<VertexArray>& va, std::shared_ptr<Shader>& shader, 
 		float mass = 1.0f, glm::vec3 pos = {0.0f, 0.0f, 0.0f}, glm::vec3 scale = {1.0f, 1.0f, 1.0f}, glm::vec4 color = {1.0f, 1.0f, 1.0f, 1.0f}) :
@@ -40,29 +45,26 @@ public:
 void Planet::update(const glm::vec3 center, const float centerMass, const float eccentricity, const float focalDistance)
 {
 	float distance = glm::length(_pos - center);
-	float centralForce = 10000000 * centerMass * _mass / (distance * distance);
+	if (distance == 0.f) return;
+	float centralForce = 9999 * centerMass * _mass / (distance * distance);
 	float angularVelocity = sqrtf(centralForce / (_mass * distance));
 
-	static float degreeDelta = 0.f;
-	static float lastFrame = 0.f;
-	static bool isFirstEntry = true;
-	if (isFirstEntry)
+	if (_isFirstEntry)
 	{
-		lastFrame = glfwGetTime();
-		isFirstEntry = false;
-		return;
+		_lastFrame = glfwGetTime();
+		_isFirstEntry = false;
 	}
 
 	float currentFrame = (float)glfwGetTime();
-	degreeDelta += (currentFrame - lastFrame) * angularVelocity;
-	lastFrame = currentFrame;
+	_degreeDelta += (currentFrame - _lastFrame) * angularVelocity;
+	_lastFrame = currentFrame;
 
 	float e = eccentricity;
 	CLAMP(e, 0.01f, 0.99f);
 	float ratio = sqrtf(1 - e * e);
-	_pos.x = center.x + cosf(glm::radians(degreeDelta)) * focalDistance;
+	_pos.x = center.x + cosf(glm::radians(_degreeDelta)) * focalDistance;
 	_pos.y = center.y;
-	_pos.z = center.z + ratio * sinf(glm::radians(degreeDelta)) * focalDistance;
+	_pos.z = center.z + ratio * sinf(glm::radians(_degreeDelta)) * focalDistance;
 }
 
 void Planet::draw(GLenum mode)

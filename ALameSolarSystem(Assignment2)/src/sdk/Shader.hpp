@@ -21,6 +21,8 @@ public:
 public:
 	void enable() const;
 	void disable() const;
+
+	// uniform setters
 	void uniformMatrix4fv(const std::string& name, glm::mat4 mat);
 	void uniform4fv(const std::string& name, glm::vec4 vec);
 
