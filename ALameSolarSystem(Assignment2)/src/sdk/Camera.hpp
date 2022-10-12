@@ -39,11 +39,13 @@ public:
 	Camera(glm::vec3 position, glm::mat4 projection);
 	~Camera() = default;
 
+	void rotate(Rotation rotation, float angle);
+	void move(Direction direction, float offset);
+
 public:
 	const glm::mat4 viewMatrix() const { return glm::lookAt(_position, _forward + _position, _up); };
 	const glm::mat4 projectionMatrix() const { return _projection; };
-	void rotate(Rotation rotation, float angle);
-	void move(Direction direction, float offset);
+	const glm::vec3 position() const { return _position; };
 
 private:
 	void update();

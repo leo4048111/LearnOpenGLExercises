@@ -35,6 +35,11 @@ std::shared_ptr<VertexArray> Helper::makeSphereVertexArray(int horizontalLevel, 
 			coords.push_back(x);
 			coords.push_back(y);
 			coords.push_back(z);
+			
+			// normal vector
+			coords.push_back(x - 0);
+			coords.push_back(y - 0);
+			coords.push_back(z - 0);
 
 			if (i == 1)
 			{
@@ -71,6 +76,7 @@ std::shared_ptr<VertexArray> Helper::makeSphereVertexArray(int horizontalLevel, 
 	IndexBuffer ib(&indices[0], indices.size());
 
 	BufferLayout layout;
+	layout.push(GL_FLOAT, 3, GL_FALSE);
 	layout.push(GL_FLOAT, 3, GL_FALSE);
 
 	return std::make_shared<VertexArray>(vb, ib, layout);

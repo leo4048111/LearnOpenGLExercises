@@ -73,13 +73,15 @@ int main()
 	g_world->addPlanet("neptune", "sun", neptuneE, neptuneFD, shader, neptuneMass, { neptuneFD, 0.0f, 0.0f }, neptuneScale, neptuneColor);
 	g_world->addPlanet("pluto", "sun", plutoE, plutoFD, shader, plutoMass, { plutoFD, 0.0f, 0.0f }, plutoScale, plutoColor);
 
+	shader->uniform3fv("u_lightColor", {1.0f, 1.0f, 1.0f});
+	shader->uniform3fv("u_lightPos", { 0.0f, 0.0f, 0.0f });
 
 	while (!glfwWindowShouldClose(window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		shader->uniformMatrix4fv("u_view", camera.viewMatrix());
-
-		g_world->draw(GL_LINE);
+		shader->uniform3fv("u_viewPos", camera.position());
+		g_world->draw();
 
 		glfwPollEvents();
 		glfwSwapBuffers(window);

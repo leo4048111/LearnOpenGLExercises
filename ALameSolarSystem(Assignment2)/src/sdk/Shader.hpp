@@ -25,6 +25,7 @@ public:
 	// uniform setters
 	void uniformMatrix4fv(const std::string& name, glm::mat4 mat);
 	void uniform4fv(const std::string& name, glm::vec4 vec);
+	void uniform3fv(const std::string& name, glm::vec3 vec);
 
 private:
 	int getUniformLocation(const std::string& name);
@@ -119,5 +120,12 @@ void Shader::uniform4fv(const std::string& name, glm::vec4 vec)
 {
 	this->enable();
 	GLCall(glUniform4fv(getUniformLocation(name), 1, &vec.x));
+	this->disable();
+}
+
+void Shader::uniform3fv(const std::string& name, glm::vec3 vec)
+{
+	this->enable();
+	GLCall(glUniform3fv(getUniformLocation(name), 1, &vec.x));
 	this->disable();
 }
