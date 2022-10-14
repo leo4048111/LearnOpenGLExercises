@@ -15,9 +15,9 @@ private:
 	Renderer() = default;
 
 public:
-	static std::unique_ptr<Renderer>& getInstance() {
+	static Renderer* getInstance() {
 		if (_inst.get() == nullptr) _inst.reset(new Renderer);
-		return _inst;
+		return _inst.get();
 	}
 
 	void draw(const VertexArray& va, const Shader& shader, const GLenum polygonMode, const GLenum elementMode) const;
