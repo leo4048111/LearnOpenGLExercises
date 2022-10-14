@@ -27,9 +27,9 @@ private:
 	bool isPaused{ false };
 
 public:
-	static std::unique_ptr<Controller>& getInstance() {
+	static Controller* getInstance() {
 		if (_inst.get() == nullptr) _inst.reset(new Controller);
-		return _inst;
+		return _inst.get();
 	};
 
 	void install(GLFWwindow* window, Camera* camera);
@@ -79,7 +79,7 @@ inline void Controller::registerCallbacks()
 {
 	//glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	glfwSetCursorPosCallback(_window, Controller::mouseCallback);
-	_tController = std::make_unique<std::thread>(&Controller::keyboardHandler, Controller::getInstance().get());
+	_tController = std::make_unique<std::thread>(&Controller::keyboardHandler, Controller::getInstance());
 	_tController->detach();
 }
 

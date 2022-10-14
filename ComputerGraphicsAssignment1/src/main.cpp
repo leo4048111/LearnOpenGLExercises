@@ -99,7 +99,7 @@ int main()
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
 
-		ImGui::SetNextWindowSize({ 500, 200 });
+		ImGui::SetNextWindowSize({ 568, 402 });
 		ImGui::Begin("Menu");
 		static int projType;
 		ImGui::RadioButton("Perspective", &projType, 0); ImGui::SameLine();
