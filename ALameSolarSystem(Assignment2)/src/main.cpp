@@ -103,11 +103,12 @@ int main()
 
 		// topmost menu
 		static int display_w, display_h;
-		static bool shouldRenderPlanetNames = true, shouldRenderBasicStats = true, shouldDrawStars = true;
+		static bool shouldRenderPlanetNames = true, shouldRenderBasicStats = true, shouldDrawStars = true, shouldShowTrails = true;
 		static int starCnt = 3000;
 		ImGui_ImplGlfw_NewFrame();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui::NewFrame();
+		if (shouldShowTrails) g_world->showTrails(camera, shader);
 		if (shouldDrawStars) g_world->renderStars(camera, shader, starCnt);
 		if (shouldRenderPlanetNames) g_world->renderPlanetNames(camera, display_w, display_h);
 		if (shouldRenderBasicStats) g_world->renderPlanetInfo(camera);
@@ -127,9 +128,11 @@ int main()
 			// controls
 			ImGui::Checkbox("Render basic stats", &shouldRenderBasicStats); ImGui::SameLine();
 			ImGui::Checkbox("Render planet names", &shouldRenderPlanetNames); ImGui::SameLine();
+			ImGui::Checkbox("Show trails", &shouldShowTrails); ImGui::SameLine();
 			ImGui::Checkbox("Galaxy skybox", &shouldDrawStars);
 			if(shouldDrawStars)
 			ImGui::SliderInt("Star count", &starCnt, 1000, 5000);
+			g_world->onImGuiRender();
 			ImGui::End();
 		}
 		else Controller::getInstance()->resume();

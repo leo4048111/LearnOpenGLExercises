@@ -13,6 +13,7 @@ typedef struct
 	std::string centerPlanet;
 	float eccentricity;
 	float focalDistance;
+	VertexArray* trail;
 }PlanetInfo;
 
 class World
@@ -30,11 +31,17 @@ public:
 
 	void draw(GLenum mode = GL_FILL);
 
+	void onImGuiRender();
+
+	// some additional utils
+
 	void renderPlanetInfo(Camera& camera);
 
 	void renderPlanetNames(Camera& camera, int displayW, int displayH);
 
 	void renderStars(Camera& camera, std::shared_ptr<Shader>& shader, int count);
+
+	void showTrails(Camera& camera, std::shared_ptr<Shader>& shader);
 
 private:
 	std::shared_ptr<VertexArray> _vaSphere;
@@ -44,6 +51,8 @@ private:
 	std::vector<PlanetInfo> _planetInfos;
 
 	std::vector<Planet> _stars;
+
+	std::vector<VertexArray> _trails;
 };
 
 inline auto g_world = std::make_unique<World>();
@@ -60,7 +69,41 @@ void World::addPlanet(std::string name, std::string centerPlanet, float eccentri
 	if (_planetNameMap.find(centerPlanet) != _planetNameMap.end()) center = _planetNameMap[centerPlanet]->position();
 	Planet* planet = new Planet(_vaSphere, shader, mass, pos + center, scale, color);
 	_planetNameMap.insert(std::make_pair(name, planet));
-	_planetInfos.push_back({ planet, name, centerPlanet, eccentricity, focalDistance });
+
+	// init trail vao
+	std::vector<float> vertexes;
+	std::vector<unsigned int> indices;
+	float ratio = sqrtf(1 - eccentricity * eccentricity);
+	float degree = 0.f;
+	glm::vec3 trailPos;
+	for (degree; degree < 360.f; degree += 0.5f)
+	{
+		trailPos.x = 0.f + cosf(glm::radians(degree)) * focalDistance;
+		trailPos.y = 0.f;
+		trailPos.z = 0.f + ratio * sinf(glm::radians(degree)) * focalDistance;
+		vertexes.push_back(trailPos.x);
+		vertexes.push_back(trailPos.y);
+		vertexes.push_back(trailPos.z);
+		vertexes.push_back(trailPos.x);
+		vertexes.push_back(trailPos.y);
+		vertexes.push_back(trailPos.z);
+		indices.push_back(vertexes.size() - 1);
+		indices.push_back(vertexes.size());
+	}
+	vertexes.push_back(trailPos.x);
+	vertexes.push_back(trailPos.y);
+	vertexes.push_back(trailPos.z);
+
+	VertexBuffer vb(&vertexes[0], vertexes.size() * sizeof(float));
+	IndexBuffer ib(&indices[0], indices.size());
+
+	BufferLayout layout;
+	layout.push(GL_FLOAT, 3, GL_FALSE);
+	layout.push(GL_FLOAT, 3, GL_FALSE);
+
+	VertexArray* va = new VertexArray(vb, ib, layout);
+
+	_planetInfos.push_back({ planet, name, centerPlanet, eccentricity, focalDistance, va });
 }
 
 void World::draw(GLenum mode)
@@ -76,6 +119,19 @@ void World::draw(GLenum mode)
 	}
 
 	for (auto& info : _planetInfos) info.planet->draw(mode);
+}
+
+void World::showTrails(Camera& camera, std::shared_ptr<Shader>& shader)
+{
+	shader->uniform1i("u_shouldEnableLighting", 0);
+	for (auto& info : _planetInfos)
+	{
+		auto& centerPlanet = _planetNameMap[info.centerPlanet];
+		glm::mat4 model = glm::translate(glm::mat4(1.0f), centerPlanet->position());
+		shader->uniformMatrix4fv("u_model", model);
+		shader->uniform4fv("u_color", info.planet->color());
+		Renderer::getInstance()->draw(*info.trail, *shader, GL_FILL, GL_LINES);
+	}
 }
 
 void World::renderPlanetInfo(Camera& camera)
@@ -139,10 +195,40 @@ void World::renderStars(Camera& camera, std::shared_ptr<Shader>& shader, int cou
 	for (auto& star : _stars) star.draw();
 }
 
+void World::onImGuiRender()
+{
+	ImGui::BeginChild("#planet edit", { 0,0 }, true);
+	for (auto& info : _planetInfos)
+	{
+		ImGui::Text("%s: ", info.name.c_str()); ImGui::SameLine();
+		ImGui::PushItemWidth(75.2);
+
+		char id1[64];
+		sprintf_s(id1, "Eccentricity##%s", info.name.c_str());
+		char id2[64];
+		sprintf_s(id2, "FocalDistance##%s", info.name.c_str());
+		char id3[64];
+		sprintf_s(id3, "Mass##%s", info.name.c_str());
+		char id4[64];
+		sprintf_s(id4, "Planet color##%s", info.name.c_str());
+
+		ImGui::SliderFloat(id1, &info.eccentricity, 0.01f, 0.99f, "%.2lf"); ImGui::SameLine();
+		ImGui::SliderFloat(id2, &info.focalDistance, 0.f, 1000.f, "%.2lf"); ImGui::SameLine();
+		float mass = info.planet->mass();
+		if (ImGui::SliderFloat(id3, &mass, 1.f, 999999.f, "%.2lf")) info.planet->setMass(mass);
+		ImGui::PopItemWidth();
+		glm::vec4 color = info.planet->color();
+		if (ImGui::ColorEdit4(id4, &color.x)) info.planet->setColor(color);
+	}
+}
+
 World::~World()
 {
 	for (auto& info : _planetInfos)
+	{
 		delete info.planet;
+		delete info.trail;
+	}
 }
 
 

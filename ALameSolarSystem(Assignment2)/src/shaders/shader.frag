@@ -9,6 +9,8 @@ uniform vec3 u_lightColor;
 uniform vec3 u_lightPos;
 uniform vec3 u_viewPos;
 
+uniform int u_shouldEnableLighting;
+
 struct Material
 {
 	vec3 ambient;
@@ -19,6 +21,12 @@ struct Material
 
 void main()
 {
+	if(u_shouldEnableLighting == 0) 
+	{
+		color = u_color;
+		return;
+	}
+
 	Material material;
 	material.ambient = vec3(1.0, 0.5, 0.31);
 	material.diffuse = vec3(1.0, 0.5, 0.31);

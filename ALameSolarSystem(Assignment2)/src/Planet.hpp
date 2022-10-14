@@ -45,6 +45,8 @@ public:
 
 	void setColor(const glm::vec4 color) { _color = color; };
 
+	void setMass(const float mass) { _mass = mass; };
+
 	const glm::vec4 color() const { return _color; };
 
 	const glm::vec3 position() const { return _pos; };
@@ -83,7 +85,8 @@ void Planet::draw(GLenum mode)
 	model = glm::scale(model, _scale);
 	_shader->uniformMatrix4fv("u_model", model);
 	_shader->uniform4fv("u_color", _color);
-	Renderer::getInstance()->draw(*_va, *_shader, mode);
+	_shader->uniform1i("u_shouldEnableLighting", 1);
+	Renderer::getInstance()->draw(*_va, *_shader, mode, GL_TRIANGLES);
 }
 
 void Planet::scale(const glm::vec3 scale)

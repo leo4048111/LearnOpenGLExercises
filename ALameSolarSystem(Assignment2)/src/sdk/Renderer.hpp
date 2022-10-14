@@ -20,7 +20,7 @@ public:
 		return _inst;
 	}
 
-	void draw(const VertexArray& va, const Shader& shader, const GLenum mode) const;
+	void draw(const VertexArray& va, const Shader& shader, const GLenum polygonMode, const GLenum elementMode) const;
 
 private:
 	static std::unique_ptr<Renderer> _inst;
@@ -28,12 +28,13 @@ private:
 
 std::unique_ptr<Renderer> Renderer::_inst;
 
-void Renderer::draw(const VertexArray& va, const Shader& shader, const GLenum mode) const
+// TODO: encapsulate both glDrawElements and glDrawArrays instead of using default glDrawElements
+void Renderer::draw(const VertexArray& va, const Shader& shader, const GLenum polygonMode, const GLenum elementMode) const
 {
 	va.bind();
 	shader.enable();
-	GLCall(glPolygonMode(GL_FRONT_AND_BACK, mode));
-	GLCall(glDrawElements(GL_TRIANGLES, va.count(), GL_UNSIGNED_INT, nullptr));
+	GLCall(glPolygonMode(GL_FRONT_AND_BACK, polygonMode));
+	GLCall(glDrawElements(elementMode, va.count(), GL_UNSIGNED_INT, nullptr));
 	va.unbind();
 	shader.disable();
 }

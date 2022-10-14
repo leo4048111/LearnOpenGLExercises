@@ -11,6 +11,7 @@ public:
 	static std::shared_ptr<VertexArray> makeSphereVertexArray(int horizontalLevel, int verticalLevel, float radius);
 };
 
+// make vertex array which represents a sphere
 std::shared_ptr<VertexArray> Helper::makeSphereVertexArray(int horizontalLevel, int verticalLevel, float radius)
 {
 	std::vector<float> coords;
