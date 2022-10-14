@@ -42,7 +42,7 @@ int main()
 	// init camera
 	glm::mat4 projection(1.0f);
 	projection = glm::perspective(glm::radians(45.f), (float)windowWidth / windowHeight, 0.1f, 1000.f);
-	Camera camera({ -258.996, 155.407, 206.011 }, projection, -32.25, -39.25);
+	Camera camera({ -165.291, 233.284, 360.599 }, projection, -30.750, -69.750);
 
 	// init shader
 	auto shader = std::make_shared<Shader>("src/shaders/shader.vert", "src/shaders/shader.frag");
